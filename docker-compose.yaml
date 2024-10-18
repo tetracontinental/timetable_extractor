@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  db:
+    build: .
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: school_schedule
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secret

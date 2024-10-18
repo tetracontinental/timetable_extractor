@@ -1,17 +1,16 @@
-# Use the official Python image from the Docker Hub
-FROM python:3.9-slim
+FROM postgres:13
 
-# Set the working directory to /app
-WORKDIR /app
+# 環境変数の設定
+ENV POSTGRES_DB=school_schedule
+ENV POSTGRES_USER=admin
+ENV POSTGRES_PASSWORD=secret
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# 初期化スクリプトをコピー
+COPY ./init /docker-entrypoint-initdb.d/
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+# データベースの設定を最適化（オプション）
+# RUN echo "max_connections = 100" >> /usr/share/postgresql/postgresql.conf.sample
+# RUN echo "shared_buffers = 128MB" >> /usr/share/postgresql/postgresql.conf.sample
 
-# Create a directory for data
-RUN mkdir /data
-
-# Command to run the application
-CMD ["python", "your_script.py"]
+# ポートの公開
+EXPOSE 5432
