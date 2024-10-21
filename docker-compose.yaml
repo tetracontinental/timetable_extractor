@@ -1,13 +1,21 @@
-version: '3.8'
-
 services:
-  db:
-    build: .
-    volumes:
-      - ./data:/var/lib/postgresql/data
+  mongodb:
+    build:
+      context: ./mongo
     ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_DB: school_schedule
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: secret
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # python_server:
+  #   build:
+  #     context: ./python_code
+  #   depends_on:
+  #     - mongodb
+  #   ports:
+  #     - "5000:5000"
+  #   environment:
+  #     - MONGO_URI=mongodb://mongodb:27017/School_Timetable
+
+volumes:
+  mongo_data:
