@@ -1,0 +1,21 @@
+services:
+  mongodb:
+    build:
+      context: ./mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  # python_server:
+  #   build:
+  #     context: ./python_code
+  #   depends_on:
+  #     - mongodb
+  #   ports:
+  #     - "5000:5000"
+  #   environment:
+  #     - MONGO_URI=mongodb://mongodb:27017/School_Timetable
+
+volumes:
+  mongo_data:
