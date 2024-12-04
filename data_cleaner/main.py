@@ -1,5 +1,3 @@
-import os
-import json
 from pdfToJson import extract_pdf_data
 from DB import MongoDBHandler, json_serial
 
