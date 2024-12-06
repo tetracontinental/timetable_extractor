@@ -28,7 +28,7 @@ def extract_events_from_day(
     index: int, 
     local_row: int, 
     current_month: int,
-    row_type: str = 'first'
+    row_type: str = 'event'
 ) -> Tuple[Dict[int, Dict[str, Union[List[str], List[List[str]]]]], int]:
     """
     特定の日付のイベントを抽出し、月情報も更新する
@@ -38,7 +38,7 @@ def extract_events_from_day(
         index (int): 行インデックス
         local_row (int): 列インデックス
         current_month (int): 現在の月
-        row_type (str): 取得する行のタイプ ('first', 'second', 'third')
+        row_type (str): 取得する行のタイプ ('event', '3', '2G', '2I', '1')
 
     Returns:
         Tuple[Dict, int]: イベント辞書と更新された月
@@ -53,14 +53,14 @@ def extract_events_from_day(
     if day == 1 and current_month != 1:
         current_month += 1
 
-    if row_type == 'first':
+    if row_type == 'event':
         events = data.iloc[index, local_row + 1:local_row + 6].dropna().tolist()
         return {current_month: {f"{day:02d}": {"events": events}}}, current_month
     else:
         # 2、3、4行目の取得
-        row_offset = {'second': 1, 'third': 2, 'fourth': 3}[row_type]
+        row_offset = {'3': 1, '2G': 2, '2I': 3, '1':4}[row_type]
         events_rows = data.iloc[index + row_offset, local_row:local_row + 6].dropna().tolist()
-        return {current_month: {f"{day:02d}": {f"{row_type}_row": events_rows}}}, current_month
+        return {current_month: {f"{day:02d}": {f"{row_type}_grade": events_rows}}}, current_month
 
 def merge_event_dictionaries(
     base_events: Dict[int, Dict[str, Dict[str, Union[List[str], List[List[str]]]]]],
@@ -102,14 +102,14 @@ def process_week(data: pd.DataFrame) -> Dict[int, Dict[str, Dict[str, Union[List
     for index in range(0, len(data), 5):  # 5行ずつ処理
         for local_row in range(0, len(data.columns), 6):
             # 1行目のイベント
-            new_events, new_month = extract_events_from_day(data, index, local_row, current_month, 'first')
+            new_events, new_month = extract_events_from_day(data, index, local_row, current_month, 'event')
             
             if new_events:
                 events_by_date = merge_event_dictionaries(events_by_date, new_events)
                 current_month = new_month
 
                 # 2~4行目のイベント
-                for row_type in ['second', 'third', 'fourth']:
+                for row_type in ['3', '2G', '2I', '1']:
                     additional_events, _ = extract_events_from_day(data, index, local_row, current_month, row_type)
                     if additional_events:
                         events_by_date = merge_event_dictionaries(events_by_date, additional_events)
@@ -122,7 +122,7 @@ def main():
     CSVファイルの処理とJSONへの変換を行う
     """
     # CSVをフォーマット
-    format_csv('dev_csv\dev_csv_R6授業時数一覧.csv', 'output.csv')
+    format_csv('input.csv', 'output.csv')
     
     # イベントを処理
     data = pd.read_csv('output.csv', header=None)
