@@ -2,7 +2,7 @@ import pdfplumber
 import jaconv
 
 def extract_schedule(row, Class):
-    day_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+    day_of_week = ["月", "火", "水", "木", "金"]
     class_schedule = {}
 
     # クラス名と教師名の抽出

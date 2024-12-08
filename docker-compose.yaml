@@ -1,19 +1,11 @@
 services:
   mongodb:
     build:
-      context: ./DB
+      context: ./backend
     ports:
       - "27017:27017"
-
-  # python_server:
-  #   build:
-  #     context: ./python_code
-  #   depends_on:
-  #     - mongodb
-  #   ports:
-  #     - "5000:5000"
-  #   environment:
-  #     - MONGO_URI=mongodb://mongodb:27017/School_Timetable
+    volumes:
+      - ./DB:/data/db
 
 volumes:
   mongo_data:

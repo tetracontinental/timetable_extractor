@@ -1,5 +1,5 @@
 from pdfToJson import extract_pdf_data
-from DB import MongoDBHandler, json_serial
+from insertDB import MongoDBHandler
 
 def get_pdf_path():
     return input("PDFファイルのパスを入力してください (終了するには'quit'と入力): ")

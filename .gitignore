@@ -164,5 +164,6 @@ cython_debug/
 /data_pdf
 /output_json
 
-dev_csv
-dev_pdf
+dev/
+DB
+

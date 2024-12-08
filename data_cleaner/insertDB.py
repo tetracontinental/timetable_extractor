@@ -1,11 +1,4 @@
 from pymongo import MongoClient
-from bson import ObjectId
-
-def json_serial(obj):
-        """JSONエンコードのためのヘルパー関数"""
-        if isinstance(obj, ObjectId):
-            return str(obj)
-        raise TypeError(f"Type {obj.__class__.__name__} not serializable")
 
 class MongoDBHandler:
     def __init__(self, host='localhost', port=27017, db_name='school_schedule_db'):
